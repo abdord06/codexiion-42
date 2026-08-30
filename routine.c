@@ -11,22 +11,14 @@ void	print_status(t_coder *coder, char *status)
 		return ;
 	}
 	now = get_time() - coder->sim->start_time;
-	
 	pthread_mutex_lock(&coder->sim->write_mutex);
 	printf("%lld %d %s\n", now, coder->id, status);
 	pthread_mutex_unlock(&coder->sim->write_mutex);
-	
 	pthread_mutex_unlock(&coder->sim->death_mutex);
 }
 
 static void	take_dongles(t_coder *coder)
 {
-	if (coder->left_dongle == coder->right_dongle)
-	{
-		acquire_dongle(coder, coder->left_dongle);
-		print_status(coder, "has taken a dongle");
-		return ;
-	}
 	if (coder->id % 2 == 0)
 	{
 		acquire_dongle(coder, coder->left_dongle);
@@ -68,23 +60,18 @@ void	*coder_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&coder->sim->death_mutex);
-		
 		take_dongles(coder);
 		pthread_mutex_lock(&coder->sim->death_mutex);
 		coder->last_compile = get_time();
 		pthread_mutex_unlock(&coder->sim->death_mutex);
 		print_status(coder, "is compiling");
 		custom_sleep(coder->sim->t_compile, coder->sim);
-		
 		release_dongle(coder->left_dongle, coder->sim);
 		release_dongle(coder->right_dongle, coder->sim);
-		
 		print_status(coder, "is debugging");
 		custom_sleep(coder->sim->t_debug, coder->sim);
-
 		print_status(coder, "is refactoring");
 		custom_sleep(coder->sim->t_refactor, coder->sim);
-		
 		coder->compile_count++;
 	}
 	return (NULL);

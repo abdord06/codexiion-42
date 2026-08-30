@@ -28,7 +28,8 @@ void	acquire_dongle(t_coder *coder, t_dongle *dongle)
 	while (1)
 	{
 		now = get_time();
-		if (!dongle->is_held && dongle->wait_queue->array[0].coder_id == coder->id)
+		if (!dongle->is_held && dongle->wait_queue->array[0].coder_id
+				== coder->id)
 		{
 			if (now >= dongle->available_at)
 				break ;

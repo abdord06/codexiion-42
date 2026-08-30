@@ -24,9 +24,9 @@ static int	is_coder_dead(t_coder *coder)
 	{
 		coder->sim->is_dead = 1;
 		pthread_mutex_unlock(&coder->sim->death_mutex);
-		
 		pthread_mutex_lock(&coder->sim->write_mutex);
-		printf("%lld %d burned out\n", now - coder->sim->start_time, coder->id);
+		printf("%lld %d burned out\n", now - coder->sim->start_time,
+				coder->id);
 		pthread_mutex_unlock(&coder->sim->write_mutex);
 		return (1);
 	}

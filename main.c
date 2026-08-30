@@ -66,7 +66,7 @@ int	parse_args(t_sim *sim, int argc, char **argv)
 	else
 		return (printf("Error: scheduler should be 'fifo' or 'edf'.\n"), 1);
 	if (sim->nb_coders <= 0 || sim->t_burnout < 0 || sim->t_compile < 0
-		|| sim->t_debug < 0 || sim->t_refactor < 0 || sim->cooldown < 0)
+			|| sim->t_debug < 0 || sim->t_refactor < 0 || sim->cooldown < 0)
 		return (printf("Error: Arguments invalid.\n"), 1);
 	return (0);
 }
@@ -154,7 +154,8 @@ static int	start_coders(t_sim *sim)
 	while (i < sim->nb_coders)
 	{
 		sim->coders[i].last_compile = sim->start_time;
-		if (pthread_create(&sim->coders[i].thread_id, NULL, coder_routine, &sim->coders[i]) != 0)
+		if (pthread_create(&sim->coders[i].thread_id, NULL, coder_routine,
+				&sim->coders[i]) != 0)
 		{
 			pthread_mutex_lock(&sim->death_mutex);
 			sim->is_dead = 1;
@@ -192,7 +193,6 @@ int	main(int argc, char **argv)
 		return (1);
 	if (init_sim(&sim) == 1)
 		return (1);
-	
 	sim.start_time = get_time();
 	if (start_coders(&sim) == 1)
 	{
@@ -217,7 +217,6 @@ int	main(int argc, char **argv)
 		pthread_join(sim.coders[i].thread_id, NULL);
 		i++;
 	}
-	
 	clean_simulation(&sim);
 	return (0);
 }

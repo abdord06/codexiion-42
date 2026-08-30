@@ -22,10 +22,8 @@ void	clean_simulation(t_sim *sim)
 		free_heap(sim->dongles[i].wait_queue);
 		i++;
 	}
-	
 	pthread_mutex_destroy(&sim->write_mutex);
 	pthread_mutex_destroy(&sim->death_mutex);
-
 	free(sim->dongles);
 	free(sim->coders);
 }
