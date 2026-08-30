@@ -2,7 +2,9 @@
 
 t_heap *init_heap(int max_capacity)
 {
-    t_heap *h = malloc(sizeof(t_heap));
+    t_heap *h;
+
+    h = malloc(sizeof(t_heap));
     if (!h) return (NULL);
     
     h->array = malloc(sizeof(t_request) * max_capacity);
@@ -18,16 +20,14 @@ t_heap *init_heap(int max_capacity)
 int is_higher_priority(t_request req1, t_request req2)
 {
     if (req1.priority < req2.priority)
-        return (1); // req1 3ndo ra9m sgher (asba9)
+        return (1);
     if (req1.priority == req2.priority) {
-        // Hada howa l'Tie-Breaker rule li mtolb f l'projet!
         if (req1.tie_breaker < req2.tie_breaker)
             return (1);
     }
     return (0);
 }
 
-// 3. Fonction d l'echange (Swap)
 void swap_req(t_request *a, t_request *b)
 {
     t_request temp = *a;
