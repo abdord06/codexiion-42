@@ -27,6 +27,14 @@ void	acquire_dongle(t_coder *coder, t_dongle *dongle)
 	heap_insert(dongle->wait_queue, req);
 	while (1)
 	{
+        pthread_mutex_lock(&coder->sim->death_mutex);
+        if (coder->sim->is_dead)
+        {
+            pthread_mutex_unlock(&coder->sim->death_mutex);
+            pthread_mutex_unlock(&dongle->mutex);
+            return ;
+        }
+        pthread_mutex_unlock(&coder->sim->death_mutex);
 		now = get_time();
 		if (!dongle->is_held && dongle->wait_queue->array[0].coder_id
 				== coder->id)
