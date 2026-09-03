@@ -163,5 +163,7 @@ int	main(int argc, char **argv)
 	i = -1;
 	while (++i < sim.nb_coders)
 		pthread_join(sim.coders[i].thread_id, NULL);
-	return (clean_simulation(&sim), 0);
+    clean_simulation(&sim);
+    printf("==== Finiched with success ====\n");
+	return (0);
 }
