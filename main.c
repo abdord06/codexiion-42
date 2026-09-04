@@ -13,10 +13,37 @@ static void	wake_up_everyone(t_sim *sim)
 	}
 }
 
+static int is_valid_number(char *str)
+{
+    int i = 0;
+
+    if (str[i] == '+')
+        i++;
+    if (str[i] == '\0')
+        return (0);
+    while (str[i])
+    {
+        if (str[i] < '0' || str[i] > '9')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 int	parse_args(t_sim *sim, int argc, char **argv)
 {
+    int i;
+
 	if (argc != 9)
 		return (printf("Error: you need 8 arguments.\n"), 1);
+    
+    i = 1;
+    while (i <= 7)
+    {
+        if (!is_valid_number(argv[i]))
+            return (printf("Error: Arguments must be positive numeric values.\n"), 1);
+        i++;
+    }
 	sim->nb_coders = atoi(argv[1]);
 	sim->t_burnout = atoi(argv[2]);
 	sim->t_compile = atoi(argv[3]);
@@ -163,7 +190,6 @@ int	main(int argc, char **argv)
 	i = -1;
 	while (++i < sim.nb_coders)
 		pthread_join(sim.coders[i].thread_id, NULL);
-    clean_simulation(&sim);
-    printf("==== Finiched with success ====\n");
+	clean_simulation(&sim);
 	return (0);
 }
