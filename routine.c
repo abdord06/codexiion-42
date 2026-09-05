@@ -43,10 +43,7 @@ static void take_dongles(t_coder *coder)
 void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
-	int		groups;
-	int		table_cycle;
-	int		natural_cycle;
-	int		think_time;
+    int     think_time;
 
 	coder = (t_coder *)arg;
     while (1)
@@ -104,16 +101,9 @@ void	*coder_routine(void *arg)
             break;
         }
         pthread_mutex_unlock(&coder->sim->death_mutex);
-
-        if (coder->sim->nb_coders % 2 == 0)
-			groups = 2;
-		else
-			groups = 3;
-		table_cycle = groups * (coder->sim->t_compile + coder->sim->cooldown);
-		natural_cycle = coder->sim->t_compile + coder->sim->t_debug + coder->sim->t_refactor;
-		think_time = table_cycle - natural_cycle;
+        think_time = (coder->sim->t_burnout / 2) - (coder->sim->t_compile + coder->sim->t_debug + coder->sim->t_refactor);
 		if (think_time > 0)
-			custom_sleep(think_time + 10, coder->sim);
+			custom_sleep(think_time, coder->sim);
 		else
 			custom_sleep(5, coder->sim);
 	}
