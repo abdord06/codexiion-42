@@ -3,6 +3,7 @@
 static t_request	build_req(t_coder *coder)
 {
 	t_request	req;
+	long long	last_compile;
 
 	req.coder_id = coder->id;
 	req.tie_breaker = coder->id;
@@ -12,7 +13,10 @@ static t_request	build_req(t_coder *coder)
 	}
 	else
 	{
-		req.priority = coder->last_compile + coder->sim->t_burnout;
+		pthread_mutex_lock(&coder->sim->death_mutex);
+		last_compile = coder->last_compile;
+		pthread_mutex_unlock(&coder->sim->death_mutex);
+		req.priority = last_compile + coder->sim->t_burnout;
 	}
 	return (req);
 }

@@ -49,6 +49,20 @@ void	*coder_routine(void *arg)
 	int		think_time;
 
 	coder = (t_coder *)arg;
+    while (1)
+    {
+        pthread_mutex_lock(&coder->sim->death_mutex);
+        if (coder->sim->sim_started == 1 || coder->sim->is_dead == 1)
+        {
+            pthread_mutex_unlock(&coder->sim->death_mutex);
+            break;
+        }
+        pthread_mutex_unlock(&coder->sim->death_mutex);
+        usleep(50);
+    }
+    pthread_mutex_lock(&coder->sim->death_mutex);
+    coder->last_compile = coder->sim->start_time;
+    pthread_mutex_unlock(&coder->sim->death_mutex);
 	if (coder->id % 2 == 0)
 		custom_sleep(10, coder->sim);
 	else if (coder->id == coder->sim->nb_coders)

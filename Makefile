@@ -7,6 +7,8 @@ RM          = rm -f
 SRCS        = main.c \
               time.c \
               heap.c \
+			  init.c\
+			  parse.c\
               arbitrator.c \
               routine.c \
               monitor.c \

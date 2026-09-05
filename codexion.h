@@ -55,6 +55,7 @@ typedef struct s_sim
 	int			cooldown;
 	int			scheduler;
 	int			is_dead;
+    int         sim_started;
 	long long		start_time;
 	pthread_mutex_t	write_mutex;
 	pthread_mutex_t	death_mutex;
@@ -63,7 +64,8 @@ typedef struct s_sim
 }				t_sim;
 
 
-
+int parse_args(t_sim *sim, int argc, char **argv);
+int init_sim(t_sim *sim);
 long long	get_time(void);
 void		custom_sleep(long long time_in_ms, t_sim *sim);
 t_heap		*init_heap(int max_capacity);
