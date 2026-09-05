@@ -19,6 +19,11 @@ static int	is_coder_dead(t_coder *coder)
 	long long	now;
 
 	pthread_mutex_lock(&coder->sim->death_mutex);
+    if (coder->compile_count >= coder->sim->req_compiles)
+    {
+        pthread_mutex_unlock(&coder->sim->death_mutex);
+        return (0);
+    }
 	now = get_time();
 	if (now - coder->last_compile >= coder->sim->t_burnout)
 	{

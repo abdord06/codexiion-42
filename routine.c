@@ -60,9 +60,9 @@ void	*coder_routine(void *arg)
         pthread_mutex_unlock(&coder->sim->death_mutex);
         usleep(50);
     }
-    pthread_mutex_lock(&coder->sim->death_mutex);
-    coder->last_compile = coder->sim->start_time;
-    pthread_mutex_unlock(&coder->sim->death_mutex);
+	pthread_mutex_lock(&coder->sim->death_mutex);
+	coder->last_compile = coder->sim->start_time;
+	pthread_mutex_unlock(&coder->sim->death_mutex);
 	if (coder->id % 2 == 0)
 		custom_sleep(10, coder->sim);
 	else if (coder->id == coder->sim->nb_coders)
@@ -98,6 +98,11 @@ void	*coder_routine(void *arg)
 		custom_sleep(coder->sim->t_refactor, coder->sim);
         pthread_mutex_lock(&coder->sim->death_mutex);
 		coder->compile_count++;
+        if (coder->compile_count >= coder->sim->req_compiles)
+        {
+            pthread_mutex_unlock(&coder->sim->death_mutex);
+            break;
+        }
         pthread_mutex_unlock(&coder->sim->death_mutex);
 
         if (coder->sim->nb_coders % 2 == 0)
