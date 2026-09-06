@@ -44,33 +44,40 @@ static int  init_dongles(t_sim *sim)
     return (-1);
 }
 
-int init_sim(t_sim *sim)
+static void	init_coders(t_sim *sim)
 {
-    int     i;
-    t_coder *c;
+	int		i;
+	t_coder	*c;
 
-    sim->is_dead = 0;
-    sim->sim_started = 0;
-    if (pthread_mutex_init(&sim->write_mutex, NULL) != 0)
-        return (1);
-    if (pthread_mutex_init(&sim->death_mutex, NULL) != 0)
-        return (pthread_mutex_destroy(&sim->write_mutex), 1);
-    sim->coders = malloc(sizeof(t_coder) * sim->nb_coders);
-    sim->dongles = malloc(sizeof(t_dongle) * sim->nb_coders);
-    if (!sim->coders || !sim->dongles)
-        return (cleanup_init(sim, 0), 1);
-    i = init_dongles(sim);
-    if (i != -1)
-        return (cleanup_init(sim, i), 1);
-    i = -1;
-    while (++i < sim->nb_coders)
-    {
-        c = &sim->coders[i];
-        c->id = i + 1;
-        c->compile_count = 0;
-        c->sim = sim;
-        c->left_dongle = &sim->dongles[i];
-        c->right_dongle = &sim->dongles[(i + 1) % sim->nb_coders];
-    }
-    return (0);
+	i = -1;
+	while (++i < sim->nb_coders)
+	{
+		c = &sim->coders[i];
+		c->id = i + 1;
+		c->compile_count = 0;
+		c->sim = sim;
+		c->left_dongle = &sim->dongles[i];
+		c->right_dongle = &sim->dongles[(i + 1) % sim->nb_coders];
+	}
+}
+
+int	init_sim(t_sim *sim)
+{
+	int	i;
+
+	sim->is_dead = 0;
+	sim->sim_started = 0;
+	if (pthread_mutex_init(&sim->write_mutex, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&sim->death_mutex, NULL) != 0)
+		return (pthread_mutex_destroy(&sim->write_mutex), 1);
+	sim->coders = malloc(sizeof(t_coder) * sim->nb_coders);
+	sim->dongles = malloc(sizeof(t_dongle) * sim->nb_coders);
+	if (!sim->coders || !sim->dongles)
+		return (cleanup_init(sim, 0), 1);
+	i = init_dongles(sim);
+	if (i != -1)
+		return (cleanup_init(sim, i), 1);
+	init_coders(sim);
+	return (0);
 }

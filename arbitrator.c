@@ -21,27 +21,22 @@ static t_request	build_req(t_coder *coder)
 	return (req);
 }
 
-void	acquire_dongle(t_coder *coder, t_dongle *dongle)
+static int	wait_for_turn(t_coder *coder, t_dongle *dongle)
 {
-	t_request	req;
 	long long	now;
 
-	pthread_mutex_lock(&dongle->mutex);
-	req = build_req(coder);
-	heap_insert(dongle->wait_queue, req);
 	while (1)
 	{
-        pthread_mutex_lock(&coder->sim->death_mutex);
-        if (coder->sim->is_dead)
-        {
-            pthread_mutex_unlock(&coder->sim->death_mutex);
-            pthread_mutex_unlock(&dongle->mutex);
-            return ;
-        }
-        pthread_mutex_unlock(&coder->sim->death_mutex);
+		pthread_mutex_lock(&coder->sim->death_mutex);
+		if (coder->sim->is_dead)
+		{
+			pthread_mutex_unlock(&coder->sim->death_mutex);
+			return (1);
+		}
+		pthread_mutex_unlock(&coder->sim->death_mutex);
 		now = get_time();
 		if (!dongle->is_held && dongle->wait_queue->array[0].coder_id
-				== coder->id)
+			== coder->id)
 		{
 			if (now >= dongle->available_at)
 				break ;
@@ -51,6 +46,18 @@ void	acquire_dongle(t_coder *coder, t_dongle *dongle)
 			continue ;
 		}
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
+	}
+	return (0);
+}
+
+void	acquire_dongle(t_coder *coder, t_dongle *dongle)
+{
+	pthread_mutex_lock(&dongle->mutex);
+	heap_insert(dongle->wait_queue, build_req(coder));
+	if (wait_for_turn(coder, dongle))
+	{
+		pthread_mutex_unlock(&dongle->mutex);
+		return ;
 	}
 	heap_extract(dongle->wait_queue);
 	dongle->is_held = 1;

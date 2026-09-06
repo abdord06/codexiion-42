@@ -4,11 +4,13 @@ CC          = cc
 CFLAGS      = -Wall -Wextra -Werror -pthread
 RM          = rm -f
 
+HEADER      = codexion.h
+
 SRCS        = main.c \
               time.c \
               heap.c \
-			  init.c\
-			  parse.c\
+              init.c \
+              parse.c \
               arbitrator.c \
               routine.c \
               monitor.c \
@@ -17,6 +19,9 @@ SRCS        = main.c \
 OBJS        = $(SRCS:.c=.o)
 
 all: $(NAME)
+
+%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)

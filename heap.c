@@ -59,24 +59,12 @@ void	heap_insert(t_heap *h, t_request req)
 	}
 }
 
-t_request	heap_extract(t_heap *h)
+static void	heapify_down(t_heap *h, int current)
 {
-	t_request	top;
-	t_request	empty;
-	int		current;
-	int		left;
-	int		right;
-	int		smallest;
+	int	left;
+	int	right;
+	int	smallest;
 
-	empty.coder_id = -1;
-	empty.priority = -1;
-	empty.tie_breaker = -1;
-	if (h->size <= 0)
-		return (empty);
-	top = h->array[0];
-	h->array[0] = h->array[h->size - 1];
-	h->size--;
-	current = 0;
 	while (1)
 	{
 		left = 2 * current + 1;
@@ -93,5 +81,21 @@ t_request	heap_extract(t_heap *h)
 		swap_req(&h->array[current], &h->array[smallest]);
 		current = smallest;
 	}
+}
+
+t_request	heap_extract(t_heap *h)
+{
+	t_request	top;
+	t_request	empty;
+
+	empty.coder_id = -1;
+	empty.priority = -1;
+	empty.tie_breaker = -1;
+	if (h->size <= 0)
+		return (empty);
+	top = h->array[0];
+	h->array[0] = h->array[h->size - 1];
+	h->size--;
+	heapify_down(h, 0);
 	return (top);
 }
