@@ -6,29 +6,11 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:02 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:42:03 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/06 14:45:40 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
-t_heap	*init_heap(int max_capacity)
-{
-	t_heap	*h;
-
-	h = malloc(sizeof(t_heap));
-	if (!h)
-		return (NULL);
-	h->array = malloc(sizeof(t_request) * max_capacity);
-	if (!h->array)
-	{
-		free(h);
-		return (NULL);
-	}
-	h->capacity = max_capacity;
-	h->size = 0;
-	return (h);
-}
 
 int	is_higher_priority(t_request req1, t_request req2)
 {

@@ -6,7 +6,7 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:24 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:42:25 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/06 14:57:16 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ static int	is_coder_dead(t_coder *coder)
 	long long	now;
 
 	pthread_mutex_lock(&coder->sim->death_mutex);
-    if (coder->compile_count >= coder->sim->req_compiles)
-    {
-        pthread_mutex_unlock(&coder->sim->death_mutex);
-        return (0);
-    }
+	if (coder->compile_count >= coder->sim->req_compiles)
+	{
+		pthread_mutex_unlock(&coder->sim->death_mutex);
+		return (0);
+	}
 	now = get_time();
 	if (now - coder->last_compile >= coder->sim->t_burnout)
 	{
@@ -43,7 +43,7 @@ static int	is_coder_dead(t_coder *coder)
 		pthread_mutex_unlock(&coder->sim->death_mutex);
 		pthread_mutex_lock(&coder->sim->write_mutex);
 		printf("%lld %d burned out\n", now - coder->sim->start_time,
-				coder->id);
+			coder->id);
 		pthread_mutex_unlock(&coder->sim->write_mutex);
 		return (1);
 	}

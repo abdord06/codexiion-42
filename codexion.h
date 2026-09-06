@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/06 14:57:46 by aredouan          #+#    #+#             */
+/*   Updated: 2026/09/06 15:01:37 by aredouan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CODEXION_H
 # define CODEXION_H
 
@@ -8,7 +20,7 @@
 # include <unistd.h>
 # include <string.h>
 
-typedef struct s_sim t_sim;
+typedef struct s_sim	t_sim;
 
 typedef struct s_request
 {
@@ -37,25 +49,25 @@ typedef struct s_coder
 {
 	int			id;
 	int			compile_count;
-	long long		last_compile;
-	pthread_t		thread_id;
-	t_dongle		*left_dongle;
-	t_dongle		*right_dongle;
-	t_sim			*sim;
+	long long	last_compile;
+	pthread_t	thread_id;
+	t_dongle	*left_dongle;
+	t_dongle	*right_dongle;
+	t_sim		*sim;
 }				t_coder;
 
 typedef struct s_sim
 {
-	int			nb_coders;
-	int			t_burnout;
-	int			t_compile;
-	int			t_debug;
-	int			t_refactor;
-	int			req_compiles;
-	int			cooldown;
-	int			scheduler;
-	int			is_dead;
-    int         sim_started;
+	int				nb_coders;
+	int				t_burnout;
+	int				t_compile;
+	int				t_debug;
+	int				t_refactor;
+	int				req_compiles;
+	int				cooldown;
+	int				scheduler;
+	int				is_dead;
+	int				sim_started;
 	long long		start_time;
 	pthread_mutex_t	write_mutex;
 	pthread_mutex_t	death_mutex;
@@ -63,9 +75,8 @@ typedef struct s_sim
 	t_coder			*coders;
 }				t_sim;
 
-
-int parse_args(t_sim *sim, int argc, char **argv);
-int init_sim(t_sim *sim);
+int			parse_args(t_sim *sim, int argc, char **argv);
+int			init_sim(t_sim *sim);
 long long	get_time(void);
 void		custom_sleep(long long time_in_ms, t_sim *sim);
 t_heap		*init_heap(int max_capacity);

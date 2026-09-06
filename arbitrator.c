@@ -6,11 +6,28 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:41:53 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:41:55 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/06 14:47:02 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+void	print_status(t_coder *coder, char *status)
+{
+	long long	now;
+
+	pthread_mutex_lock(&coder->sim->death_mutex);
+	if (coder->sim->is_dead == 1)
+	{
+		pthread_mutex_unlock(&coder->sim->death_mutex);
+		return ;
+	}
+	now = get_time() - coder->sim->start_time;
+	pthread_mutex_lock(&coder->sim->write_mutex);
+	printf("%lld %d %s\n", now, coder->id, status);
+	pthread_mutex_unlock(&coder->sim->write_mutex);
+	pthread_mutex_unlock(&coder->sim->death_mutex);
+}
 
 static t_request	build_req(t_coder *coder)
 {

@@ -6,54 +6,72 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:10 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:42:11 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/06 14:57:16 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void cleanup_init(t_sim *sim, int count)
+t_heap	*init_heap(int max_capacity)
 {
-    while (--count >= 0)
-    {
-        pthread_mutex_destroy(&sim->dongles[count].mutex);
-        pthread_cond_destroy(&sim->dongles[count].cond);
-        if (sim->dongles[count].wait_queue)
-        {
-            free(sim->dongles[count].wait_queue->array);
-            free(sim->dongles[count].wait_queue);
-        }
-    }
-    pthread_mutex_destroy(&sim->write_mutex);
-    pthread_mutex_destroy(&sim->death_mutex);
-    if (sim->dongles)
-        free(sim->dongles);
-    if (sim->coders)
-        free(sim->coders);
+	t_heap	*h;
+
+	h = malloc(sizeof(t_heap));
+	if (!h)
+		return (NULL);
+	h->array = malloc(sizeof(t_request) * max_capacity);
+	if (!h->array)
+	{
+		free(h);
+		return (NULL);
+	}
+	h->capacity = max_capacity;
+	h->size = 0;
+	return (h);
 }
 
-static int  init_dongles(t_sim *sim)
+static void	cleanup_init(t_sim *sim, int count)
 {
-    int i;
+	while (--count >= 0)
+	{
+		pthread_mutex_destroy(&sim->dongles[count].mutex);
+		pthread_cond_destroy(&sim->dongles[count].cond);
+		if (sim->dongles[count].wait_queue)
+		{
+			free(sim->dongles[count].wait_queue->array);
+			free(sim->dongles[count].wait_queue);
+		}
+	}
+	pthread_mutex_destroy(&sim->write_mutex);
+	pthread_mutex_destroy(&sim->death_mutex);
+	if (sim->dongles)
+		free(sim->dongles);
+	if (sim->coders)
+		free(sim->coders);
+}
 
-    i = -1;
-    while (++i < sim->nb_coders)
-    {
-        if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
-            return (i);
-        if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)
-            return (pthread_mutex_destroy(&sim->dongles[i].mutex), i);
-        sim->dongles[i].available_at = 0;
-        sim->dongles[i].is_held = 0;
-        sim->dongles[i].wait_queue = init_heap(sim->nb_coders);
-        if (!sim->dongles[i].wait_queue)
-        {
-            pthread_cond_destroy(&sim->dongles[i].cond);
-            pthread_mutex_destroy(&sim->dongles[i].mutex);
-            return (i);
-        }
-    }
-    return (-1);
+static int	init_dongles(t_sim *sim)
+{
+	int	i;
+
+	i = -1;
+	while (++i < sim->nb_coders)
+	{
+		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
+			return (i);
+		if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)
+			return (pthread_mutex_destroy(&sim->dongles[i].mutex), i);
+		sim->dongles[i].available_at = 0;
+		sim->dongles[i].is_held = 0;
+		sim->dongles[i].wait_queue = init_heap(sim->nb_coders);
+		if (!sim->dongles[i].wait_queue)
+		{
+			pthread_cond_destroy(&sim->dongles[i].cond);
+			pthread_mutex_destroy(&sim->dongles[i].mutex);
+			return (i);
+		}
+	}
+	return (-1);
 }
 
 static void	init_coders(t_sim *sim)

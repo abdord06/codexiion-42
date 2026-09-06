@@ -6,33 +6,16 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:34 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:42:35 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/06 15:03:00 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	print_status(t_coder *coder, char *status)
+static void	take_dongles(t_coder *coder)
 {
-	long long	now;
-
-	pthread_mutex_lock(&coder->sim->death_mutex);
-	if (coder->sim->is_dead == 1)
-	{
-		pthread_mutex_unlock(&coder->sim->death_mutex);
-		return ;
-	}
-	now = get_time() - coder->sim->start_time;
-	pthread_mutex_lock(&coder->sim->write_mutex);
-	printf("%lld %d %s\n", now, coder->id, status);
-	pthread_mutex_unlock(&coder->sim->write_mutex);
-	pthread_mutex_unlock(&coder->sim->death_mutex);
-}
-
-static void take_dongles(t_coder *coder)
-{
-	t_dongle *first;
-	t_dongle *second;
+	t_dongle	*first;
+	t_dongle	*second;
 
 	if (coder->left_dongle < coder->right_dongle)
 	{
@@ -44,7 +27,6 @@ static void take_dongles(t_coder *coder)
 		first = coder->right_dongle;
 		second = coder->left_dongle;
 	}
-
 	acquire_dongle(coder, first);
 	print_status(coder, "has taken a dongle");
 	acquire_dongle(coder, second);
