@@ -6,7 +6,7 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:41:53 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 15:42:13 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 18:58:48 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ t_request	build_req(t_coder *coder)
 	req.coder_id = coder->id;
 	if (coder->sim->scheduler == 0)
 	{
-		req.priority = get_time();
+        pthread_mutex_lock(&coder->sim->death_mutex);
+        req.priority = coder->sim->req_seq++;
+        pthread_mutex_unlock(&coder->sim->death_mutex);
 		req.tie_breaker = 0;
 	}
 	else

@@ -6,13 +6,13 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:34 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 15:42:26 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 19:27:21 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	take_dongles(t_coder *coder)
+static int	take_dongles(t_coder *coder)
 {
 	t_dongle	*d[2];
 
@@ -20,10 +20,11 @@ static void	take_dongles(t_coder *coder)
 	while (1)
 	{
 		if (check_death(coder))
-			return ;
+			return (0);
 		if (acquire_dongles(coder, d))
 			break ;
 	}
+	return (1);
 }
 
 static void	wait_for_start(t_coder *coder)
@@ -45,26 +46,31 @@ static int	do_activities(t_coder *coder)
 {
 	if (check_death(coder))
 		return (1);
-	take_dongles(coder);
+	if (!take_dongles(coder))
+		return (1);
 	pthread_mutex_lock(&coder->sim->death_mutex);
 	coder->last_compile = get_time();
 	pthread_mutex_unlock(&coder->sim->death_mutex);
 	print_status(coder, "is compiling");
 	custom_sleep(coder->sim->t_compile, coder->sim);
+    pthread_mutex_lock(&coder->sim->death_mutex);
+	coder->compile_count++;
+	pthread_mutex_unlock(&coder->sim->death_mutex);
 	release_dongle(coder->left_dongle, coder->sim);
 	release_dongle(coder->right_dongle, coder->sim);
+    
+	custom_sleep(1, coder->sim);
 	print_status(coder, "is debugging");
 	custom_sleep(coder->sim->t_debug, coder->sim);
 	print_status(coder, "is refactoring");
 	custom_sleep(coder->sim->t_refactor, coder->sim);
-	pthread_mutex_lock(&coder->sim->death_mutex);
-	coder->compile_count++;
-	if (coder->compile_count >= coder->sim->req_compiles)
-	{
-		pthread_mutex_unlock(&coder->sim->death_mutex);
-		return (1);
-	}
-	pthread_mutex_unlock(&coder->sim->death_mutex);
+    pthread_mutex_lock(&coder->sim->death_mutex);
+    if (coder->compile_count >= coder->sim->req_compiles)
+    {
+        pthread_mutex_unlock(&coder->sim->death_mutex);
+        return (1);
+    }
+    pthread_mutex_unlock(&coder->sim->death_mutex);
 	return (0);
 }
 

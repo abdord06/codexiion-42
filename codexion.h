@@ -6,7 +6,7 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:57:46 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 15:14:46 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 18:56:28 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_sim
 	int				is_dead;
 	int				sim_started;
 	long long		start_time;
+	long long       req_seq;
 	pthread_mutex_t	write_mutex;
 	pthread_mutex_t	death_mutex;
 	t_dongle		*dongles;
