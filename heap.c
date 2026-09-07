@@ -3,25 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   heap.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:02 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:45:40 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 00:03:41 by abdo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	is_higher_priority(t_request req1, t_request req2)
+int is_higher_priority(t_request req1, t_request req2)
 {
-	if (req1.priority < req2.priority)
-		return (1);
-	if (req1.priority == req2.priority)
-	{
-		if (req1.tie_breaker < req2.tie_breaker)
-			return (1);
-	}
-	return (0);
+    if (req1.priority != req2.priority)
+        return (req1.priority < req2.priority);
+        
+    if (req1.tie_breaker != req2.tie_breaker)
+        return (req1.tie_breaker < req2.tie_breaker);
+        
+    return (req1.coder_id < req2.coder_id);
 }
 
 void	swap_req(t_request *a, t_request *b)
