@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:24 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 14:57:16 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 22:59:19 by abdo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	wake_up_everyone(t_sim *sim)
+void	wake_up_everyone(t_sim *sim)
 {
 	int	i;
 
@@ -99,7 +99,7 @@ void	*monitor_routine(void *arg)
 			wake_up_everyone(sim);
 			return (NULL);
 		}
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arbitrator.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:41:53 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 18:58:48 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 23:06:49 by abdo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,21 @@ t_request	build_req(t_coder *coder)
 		pthread_mutex_unlock(&coder->sim->death_mutex);
 	}
 	return (req);
+}
+
+int	take_dongles(t_coder *coder)
+{
+	t_dongle	*d[2];
+
+	queue_for_dongles(coder, d);
+	while (1)
+	{
+		if (check_death(coder))
+			return (0);
+		if (acquire_dongles(coder, d))
+			break ;
+	}
+	return (1);
 }
 
 void	release_dongle(t_dongle *dongle, t_sim *sim)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   take_dongle.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 15:11:29 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 18:25:03 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 22:25:36 by abdo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	queue_for_dongles(t_coder *c, t_dongle **d)
 {
+    t_request	req;
+
 	if (c->left_dongle < c->right_dongle)
 	{
 		d[0] = c->left_dongle;
@@ -24,11 +26,12 @@ void	queue_for_dongles(t_coder *c, t_dongle **d)
 		d[0] = c->right_dongle;
 		d[1] = c->left_dongle;
 	}
+	req = build_req(c);
 	pthread_mutex_lock(&d[0]->mutex);
-	heap_insert(d[0]->wait_queue, build_req(c));
+	heap_insert(d[0]->wait_queue, req);
 	pthread_mutex_unlock(&d[0]->mutex);
 	pthread_mutex_lock(&d[1]->mutex);
-	heap_insert(d[1]->wait_queue, build_req(c));
+	heap_insert(d[1]->wait_queue, req);
 	pthread_mutex_unlock(&d[1]->mutex);
 }
 

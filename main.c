@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:18 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 15:03:23 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/07 23:08:06 by abdo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
-void	wake_up_everyone(t_sim *sim)
-{
-	int	i;
-
-	i = -1;
-	while (++i < sim->nb_coders)
-	{
-		pthread_mutex_lock(&sim->dongles[i].mutex);
-		pthread_cond_broadcast(&sim->dongles[i].cond);
-		pthread_mutex_unlock(&sim->dongles[i].mutex);
-	}
-}
 
 static int	start_coders(t_sim *sim)
 {
