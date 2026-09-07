@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:57:46 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/06 18:29:41 by abdo             ###   ########.fr       */
+/*   Updated: 2026/09/07 15:14:46 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ void		*coder_routine(void *arg);
 void		*monitor_routine(void *arg);
 void		release_dongle(t_dongle *dongle, t_sim *sim);
 t_request	build_req(t_coder *coder);
-
+void		queue_for_dongles(t_coder *c, t_dongle **d);
+int			acquire_dongles(t_coder *c, t_dongle **d);
+int			check_death(t_coder *coder);
 void		clean_simulation(t_sim *sim);
 
 #endif

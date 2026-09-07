@@ -11,6 +11,7 @@ SRCS        = main.c \
               heap.c \
               init.c \
               parse.c \
+			  take_dongle.c \
               arbitrator.c \
               routine.c \
               monitor.c \
