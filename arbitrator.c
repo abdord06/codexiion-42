@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arbitrator.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:41:53 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 23:06:49 by abdo             ###   ########.fr       */
+/*   Updated: 2026/09/08 21:02:58 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ t_request	build_req(t_coder *coder)
 	req.coder_id = coder->id;
 	if (coder->sim->scheduler == 0)
 	{
-        pthread_mutex_lock(&coder->sim->death_mutex);
-        req.priority = coder->sim->req_seq++;
-        pthread_mutex_unlock(&coder->sim->death_mutex);
+		pthread_mutex_lock(&coder->sim->death_mutex);
+		req.priority = coder->sim->req_seq++;
+		pthread_mutex_unlock(&coder->sim->death_mutex);
 		req.tie_breaker = 0;
 	}
 	else

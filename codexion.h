@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:57:46 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 23:06:24 by abdo             ###   ########.fr       */
+/*   Updated: 2026/09/08 21:03:52 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_sim
 	int				is_dead;
 	int				sim_started;
 	long long		start_time;
-	long long       req_seq;
+	long long		req_seq;
 	pthread_mutex_t	write_mutex;
 	pthread_mutex_t	death_mutex;
 	t_dongle		*dongles;

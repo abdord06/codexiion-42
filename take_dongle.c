@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   take_dongle.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abdo <abdo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 15:11:29 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 22:25:36 by abdo             ###   ########.fr       */
+/*   Updated: 2026/09/08 21:06:55 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	queue_for_dongles(t_coder *c, t_dongle **d)
 {
-    t_request	req;
+	t_request	req;
 
 	if (c->left_dongle < c->right_dongle)
 	{

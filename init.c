@@ -6,7 +6,7 @@
 /*   By: aredouan <aredouan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/06 14:42:10 by aredouan          #+#    #+#             */
-/*   Updated: 2026/09/07 18:56:57 by aredouan         ###   ########.fr       */
+/*   Updated: 2026/09/08 21:01:37 by aredouan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	init_sim(t_sim *sim)
 
 	sim->is_dead = 0;
 	sim->sim_started = 0;
-    sim->req_seq = 0;
+	sim->req_seq = 0;
 	if (pthread_mutex_init(&sim->write_mutex, NULL) != 0)
 		return (1);
 	if (pthread_mutex_init(&sim->death_mutex, NULL) != 0)
